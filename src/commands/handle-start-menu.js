@@ -11,7 +11,7 @@ class HandleStartCommand {
         if(messageType==="interactive" && msg.type==="list_reply"){
         switch(msg.list_reply.id){
             case "1234":
-                client.sendText(from.phoneNumber, "Please select one of the options above", false)
+               // client.sendText(from.phoneNumber, "Please select one of the options above", false)
             client.sendListMessage(from.phoneNumber,"NoQ Cash","Send Money to your loved one today","NoQ Cash",
                 [
                     {
@@ -59,7 +59,7 @@ class HandleStartCommand {
                 return new ErrorCommand().execute(message, state, client)
         }
         }else{
-            client.sendText(from.phoneNumber, "Please select one of the options above", false)
+            //client.sendText(from.phoneNumber, "Please select one of the options above", false)
             return new ShowMenuCommand().execute(message, state, client)
         }
         

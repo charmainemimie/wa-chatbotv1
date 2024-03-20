@@ -9,6 +9,7 @@ class HandleSendMoneyCommand {
     async execute(message, state, client){
         console.log("handling send money")
         const { from, messageType, msg, messageId} = message;
+        let userStage = await this.redis.getValue(`${from.phoneNumber}-stage`); // Retrieve the current stage from Redis
         if (messageType === "interactive" && msg.type === "list_reply") {
             switch (msg.list_reply.id) {
                 case "1234":
@@ -35,33 +36,14 @@ class HandleSendMoneyCommand {
             // User has entered the amount, confirm transaction
             const amount = msg.body;
             // Here, you would typically process the transaction...
-            client.sendText(from.phoneNumber, "Transaction to   was successful!", false);
+            // Retrieve the recipient's phone number from Redis before using it
+        const recipientPhoneNumber = await this.redis.getValue(`${from.phoneNumber}-recipientPhoneNumber`);
+            client.sendText(from.phoneNumber, `Transaction to  ${recipientPhoneNumber} was successful!`, false);
             await this.redis.clearValue(`${from.phoneNumber}-stage`); // Reset the user's stage
             // Optionally, clear other temporary data as needed
         }else{
-            client.sendText(from.phoneNumber, "Please select one of the options above", false)
-            client.sendListMessage(from.phoneNumber,"NoQ Cash","Send Money to your loved one today","NoQ Cash",
-                [
-                    {
-                        "title": "Select an Option",
-                        "rows": [
-                            {
-                                "id": "1234",
-                                "title": "Registered User",
-                                "description": "Send to Registered User"
-                            },
-                            {
-                                "id": "5678",
-                                "title": "Unregistered User",
-                                "description": "Advice Recipient To Visit Nearest Agent to Register"
-                            },
-                            {
-                                "id": "8910",
-                                "title": "Back",
-                                "description": "Back to Menu"
-                            }
-                        ]
-                    }] )
+            return new ShowMenuCommand().execute(message, state, client)
+    
         }
     
         
