@@ -8,7 +8,10 @@ const ShowMenuCommand = require("./show-menu");
 const StartCommand = require("./start-command");
 const HandleSendMoneyCommand = require("./sendmoney/handle_send-money");
 const ResetPasswordCommand = require("./myaccount/my-account");
+// HandleVisaCardCommand = require("./visa-card/visa_menu");
+
 const Stages = require("./stages");
+const HandleWithdrawalCommand = require("./withdrawal/withdraw");
 
 class CommandFactory {
   static createCommand(stage) {
@@ -27,6 +30,10 @@ class CommandFactory {
         return new HandleTransferCommand();
       case Stages.MY_ACCOUNT:
         return new ResetPasswordCommand();
+        case Stages.WITHDRAWALS:
+        return new HandleWithdrawalCommand();
+        // case Stages.VISA_CARD_APPLICATION:
+       // return new ();
       //d other cases as necessary for different stages or command triggers
       default:
         console.log("No matching command found for this stage");

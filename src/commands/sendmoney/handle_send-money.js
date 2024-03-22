@@ -35,18 +35,32 @@ class HandleSendMoneyCommand {
         } else if (userStage === Stages.R_AMOUNT) {
             // User has entered the amount, confirm transaction
             const amount = msg.body;
-            // Here, you would typically process the transaction...
-            // Retrieve the recipient's phone number from Redis before using it
-        const recipientPhoneNumber = await this.redis.getValue(`${from.phoneNumber}-recipientPhoneNumber`);
-            client.sendText(from.phoneNumber, `Transaction to  ${recipientPhoneNumber} was successful!`, false);
-            await this.redis.clearValue(`${from.phoneNumber}-stage`); // Reset the user's stage
-            // Optionally, clear other temporary data as needed
-        }else{
-            return new ShowMenuCommand().execute(message, state, client)
-    
+            // Prompt user for confirmation
+            client.sendText(from.phoneNumber, `Are you sure you want to send ${amount} to the recipient? (Yes/No)`, false);
+            await this.redis.setValue(`${from.phoneNumber}-stage`, Stages.CONFIRMATION); // Set confirmation stage
+        } else if (userStage === Stages.CONFIRMATION) {
+            // User confirmed the transaction
+            const confirmation = msg.body.toLowerCase();
+            if (confirmation === 'yes') {
+                // Proceed with the transaction
+                // Retrieve the recipient's phone number from Redis before using it
+                const recipientPhoneNumber = await this.redis.getValue(`${from.phoneNumber}-recipientPhoneNumber`);
+                // Process the transaction
+                client.sendText(from.phoneNumber, `Transaction to ${recipientPhoneNumber} was successful!`, false);
+                await this.redis.clearValue(`${from.phoneNumber}-stage`); // Reset the user's stage
+                // Optionally, clear other temporary data as needed
+                return new ShowMenuCommand().execute(message, state, client);
+            } else if (confirmation === 'no') {
+                // Transaction canceled, reset the stage
+                await this.redis.clearValue(`${from.phoneNumber}-stage`);
+                client.sendText(from.phoneNumber, "Transaction canceled.", false);
+                return new ShowMenuCommand().execute(message, state, client);
+            } else {
+                // Invalid response, prompt again
+                client.sendText(from.phoneNumber, "Invalid response. Please respond with 'Yes' or 'No'.", false);
+                return state;
+            }
         }
-    
-        
         return state;
     }
 }

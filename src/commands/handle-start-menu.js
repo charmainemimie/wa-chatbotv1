@@ -1,7 +1,9 @@
 const ErrorCommand = require("./error-handler");
+const ResetPasswordCommand = require("./myaccount/my-account");
 const ShowMenuCommand = require("./show-menu");
 const  Stages  = require('./stages');
-
+const HandleTransferCommand = require("./transferhistory/handle-transfer");
+const HandleWithdrawalCommand = require("./withdrawal/withdraw");
 class HandleStartCommand {
 
     constructor() {}
@@ -36,24 +38,22 @@ class HandleStartCommand {
                     }] )
                     state.stage = Stages.SEND_MONEY
                 break;
-            case "5678":
-                client.sendText(from.phoneNumber, ".", false)
-                state.stage = Stages.TRANSFER_HISTORY
-                break;
-            case "8910":
-                client.sendText(from.phoneNumber, ".", false)
-                state.stage = Stages.VISA_CARD_APPLICATION
-                break;
-
+                case "5678":
+                    return new HandleTransferCommand().execute(message, state, client);
+                    // client.sendText(from.phoneNumber, "Transfer History", false)
+                    // state.stage = Stages.TRANSFER_HISTORY;
+                    //break;
+            case "89108":
+                state.stage = Stages.WITHDRAWALS
+                return new HandleWithdrawalCommand().execute(message, state, client);
             case "8911":
-                    client.sendText(from.phoneNumber, ".", false)
-                    state.stage = Stages.LOYALTY_POINTS
-                 break;
+                return new HandleTransferCommand().execute(message, state, client);
 
             case "8912":
-                    client.sendText(from.phoneNumber, ".", false)
-                    state.stage = Stages.MY_ACCOUNT
-                 break;
+                return new ResetPasswordCommand().execute(message, state, client);
+                //     client.sendText(from.phoneNumber, ".", false)
+                //     state.stage = Stages.MY_ACCOUNT
+                //  break;
                 
             default:
                 return new ErrorCommand().execute(message, state, client)

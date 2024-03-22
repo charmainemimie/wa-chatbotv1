@@ -1,6 +1,7 @@
 const { createClient } = require('redis');
 
 class RedisClient {
+  
   constructor() {
     if (!RedisClient.instance) {
       // Correctly initialize and assign the Redis client to this.client

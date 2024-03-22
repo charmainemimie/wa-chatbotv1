@@ -10,7 +10,7 @@ class ShowTransferCommand {
         const phoneNumber = msg.body;
         this.redis.setValue(`${from.phoneNumber}-phoneNumber`, phoneNumber)
         client.sendText(from.phoneNumber, "Your transfer history is : )", false)
-        state.stage = Stages.RETURN
+        state.stage = Stages.TRANSFER_HISTORY 
         return state
     }
 }

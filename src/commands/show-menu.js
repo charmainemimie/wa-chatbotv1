@@ -21,15 +21,15 @@ class ShowMenuCommand {
                         "description": "View your NoQ Cash Transfer History"
                     },
                     {
-                        "id": "8910",
-                        "title": "VisaCard Application",
-                        "description": "Apply For a Virtual or Physical Visa Card"
+                        "id": "89108",
+                        "title": "Withdrawal",
+                        "description": " Withdraw money sent to you"
                     },
-                    {
-                        "id": "8911",
-                        "title": "Loyalty Points",
-                        "description": "View Your NoQ Cash Loyalty Points"
-                    },
+                    // {
+                    //     "id": "8911",
+                    //     "title": "Loyalty Points",
+                    //     "description": "View Your NoQ Cash Loyalty Points"
+                    // },
                     {
                         "id": "8912",
                         "title": "My Account",
