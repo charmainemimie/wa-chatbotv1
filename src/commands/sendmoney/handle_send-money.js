@@ -1,7 +1,8 @@
 const ErrorCommand = require("../error-handler");
 const ShowMenuCommand = require("../show-menu");
 const RedisClient = require("../../utils/redis/redisCient");
-const  Stages  = require('../stages');
+const Stages = require('../stages');
+const axios = require('axios'); // Import axios to make HTTP requests
 
 class HandleSendMoneyCommand {
     redis = new RedisClient()
@@ -45,8 +46,17 @@ class HandleSendMoneyCommand {
                 // Proceed with the transaction
                 // Retrieve the recipient's phone number from Redis before using it
                 const recipientPhoneNumber = await this.redis.getValue(`${from.phoneNumber}-recipientPhoneNumber`);
-                // Process the transaction
-                client.sendText(from.phoneNumber, `Transaction to ${recipientPhoneNumber} was successful!`, false);
+                // Make an API call to send money
+                try {
+                    const response = await axios.patch('https://noqapp-api-oitk6.ondigitalocean.app/customer/funds/sendmoney', {
+                        sendToPhoneNumber: recipientPhoneNumber,
+                        amount: msg.body
+                    });
+                    client.sendText(from.phoneNumber, `Transaction to ${recipientPhoneNumber} was successful!`, false);
+                } catch (error) {
+                    console.error("Error sending money:", error);
+                    client.sendText(from.phoneNumber, "Transaction failed. Please try again.", false);
+                }
                 await this.redis.clearValue(`${from.phoneNumber}-stage`); // Reset the user's stage
                 // Optionally, clear other temporary data as needed
                 return new ShowMenuCommand().execute(message, state, client);
