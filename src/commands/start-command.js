@@ -1,16 +1,59 @@
-const  Stages = require('./stages');
-const ShowMenuCommand = require("./show-menu");
+const HandleLoginCommand = require("./auth/login");
+const HandleRegisterCommand = require("./auth/register");
+const Stages = require("./stages");
+
 class StartCommand {
+  constructor() {}
 
-    constructor() {}
-    execute(message, state, client){
-        const { from, messageType, msg, messageId} = message;
-        client.sendText(from.phoneNumber, `Welcome ${state.username}`, false)
-        return new ShowMenuCommand().execute(message, state, client); 
+  async execute(message, state, client) {
+    const { from, messageType, msg, messageId } = message;
 
-        // state.stage = Stages.RETURN
-        // return state
+    // Send the welcome message only if it's not an interactive message
+    if (!(messageType === "interactive" && msg.type === "list_reply")) {
+      client.sendText(from.phoneNumber, `Hello ${state.username}`, false);
     }
+
+    // Check if the message is interactive and handle button actions
+    if (messageType === "interactive" && msg.type === "list_reply") {
+      switch (msg.list_reply.id) {
+        case "2222":
+          // Set stage to login
+          state.stage = Stages.R_PIN_CODE;
+          // Return only the login command
+          return new HandleLoginCommand().execute(message, state, client);
+        case "1111":
+          // Set stage to register
+          state.stage = Stages.R_FIRST_NAME
+          return new HandleRegisterCommand().execute(message, state, client);
+        default:
+          return new ErrorCommand().execute(message, state, client);
+      }
+    }
+
+    // Send the menu only if it's not an interactive message or after login
+    client.sendListMessage(
+      from.phoneNumber, "NoQ Cash", "Please select an option to proceed", "NoQ Cash",
+      [
+        {
+          title: "Select an Option",
+          rows: [
+            {
+              id: "2222",
+              title: "LOGIN",
+              description: "If you have an account Login to start transacting",
+            },
+            {
+              id: "1111",
+              title: "REGISTER",
+              description: "Click to register",
+            },
+          ],
+        },
+      ]
+    );
+
+    return state;
+  }
 }
 
-module.exports = StartCommand
+module.exports = StartCommand;

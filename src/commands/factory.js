@@ -12,6 +12,7 @@ const ResetPasswordCommand = require("./myaccount/my-account");
 
 const Stages = require("./stages");
 const HandleWithdrawalCommand = require("./withdrawal/withdraw");
+const HandleLoginCommand = require("./auth/login");
 
 class CommandFactory {
   static createCommand(stage) {
@@ -20,7 +21,7 @@ class CommandFactory {
         return new StartCommand();
       case Stages.RETURN:
         return new ShowMenuCommand();
-      case Stages.MENU:
+      case Stages.FIRST_MENU:
         return new HandleStartCommand();
       case Stages.SEND_MONEY:
         return new HandleSendMoneyCommand();
@@ -32,6 +33,10 @@ class CommandFactory {
         return new ResetPasswordCommand();
         case Stages.WITHDRAWALS:
         return new HandleWithdrawalCommand();
+        case Stages.LOGIN:
+        return new HandleLoginCommand();
+        case Stages.REGISTER:
+        return new HandleRegisterCommand();
         // case Stages.VISA_CARD_APPLICATION:
        // return new ();
       //d other cases as necessary for different stages or command triggers
