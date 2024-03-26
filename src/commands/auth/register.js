@@ -16,27 +16,27 @@ class HandleRegisterCommand {
         if (messageType === "interactive" && msg.type === "list_reply" && msg.list_reply.id === "1111") {
             client.sendText(from.phoneNumber, "Enter First Name:", false);
             await this.redis.setValue(`${from.phoneNumber}-stage`, Stages.R_FIRST_NAME);
-            state.stage = Stages.R_FIRST_NAME; // Update the user state's stage property
+           // state.stage = Stages.R_FIRST_NAME; // Update the user state's stage property
             return state;
         } else if (userStage === Stages.R_FIRST_NAME) {
             const customerFirstName = msg.body.trim(); // Remove extra spaces
             state.info.customerFirstName = customerFirstName;
             client.sendText(from.phoneNumber, "Enter Last Name:", false);
             await this.redis.setValue(`${from.phoneNumber}-stage`, Stages.R_LAST_NAME);
-            state.stage = Stages.R_LAST_NAME; // Update the user state's stage property
+            //state.stage = Stages.R_LAST_NAME; // Update the user state's stage property
         } else if (userStage === Stages.R_LAST_NAME) {
             const customerLastName = msg.body.trim();
             state.info.customerLastName = customerLastName;
             client.sendText(from.phoneNumber, "Enter Gender (M/F):", false);
             await this.redis.setValue(`${from.phoneNumber}-stage`, Stages.R_GENDER);
-            state.stage = Stages.R_GENDER; // Update the user state's stage property
+          //  state.stage = Stages.R_GENDER; // Update the user state's stage property
         } else if (userStage === Stages.R_GENDER) {
             const customerGender = msg.body.trim().toUpperCase(); // Convert to uppercase
             if (customerGender === 'M' || customerGender === 'F') {
                 state.info.customerGender = customerGender;
                 client.sendText(from.phoneNumber, "Enter Account Type:", false);
-                await this.redis.setValue(`${from.phoneNumber}-stage`, Stages.R_ACCOUNT_TYPE);
-                state.stage = Stages.R_ACCOUNT_TYPE; // Update the user state's stage property
+                await this.redis.setValue(`${from.phoneNumber}-stage`, Stages.ACCOUNT_TYPE);
+               // state.stage = Stages.R_ACCOUNT_TYPE; // Update the user state's stage property
             } else {
                 client.sendText(from.phoneNumber, "Invalid input. Please enter 'M' or 'F' for gender:", false);
             }
@@ -46,7 +46,8 @@ class HandleRegisterCommand {
         else {
             // Handle unknown stage or any other unexpected scenario
             console.error("Unknown stage or unexpected scenario:", userStage);
-            client.sendText(from.phoneNumber, "An unexpected error occurred. Please try again.", false);
+            client.sendText(from.phoneNumber, "Unimplemented", false);
+            state.stage = Stages.START
         }
         return state;
     }

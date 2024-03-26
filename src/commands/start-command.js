@@ -18,12 +18,13 @@ class StartCommand {
       switch (msg.list_reply.id) {
         case "2222":
           // Set stage to login
-          state.stage = Stages.R_PIN_CODE;
+          state.stage = Stages.LOGIN;
+          client.sendText(from.phoneNumber, "Please enter your PIN code:", false);
           // Return only the login command
-          return new HandleLoginCommand().execute(message, state, client);
+          return state;
         case "1111":
           // Set stage to register
-          state.stage = Stages.R_FIRST_NAME
+          state.stage = Stages.REGISTER
           return new HandleRegisterCommand().execute(message, state, client);
         default:
           return new ErrorCommand().execute(message, state, client);

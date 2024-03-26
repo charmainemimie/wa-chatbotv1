@@ -35,12 +35,17 @@ app.post('/webhook', requestParser, async (req, res) => {
       }
   }
 
-
-  // check if the incoming message contains text
+try{
   userData = await CommandFactory.createCommand(userData.stage)
                 .execute(req.parsedRequest, userData,client);
-  
   redis.setValue(from.phoneNumber,JSON.stringify(userData));
+}catch(error){
+  console.log("Error:\n", error)
+  client.sendText(from.phoneNumber, "An unexpected error occurred. Please try again later.", false);
+  redis.clearValue(from.phoneNumber)
+}
+  
+  
   res.sendStatus(200);
 
   

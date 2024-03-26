@@ -13,6 +13,7 @@ const ResetPasswordCommand = require("./myaccount/my-account");
 const Stages = require("./stages");
 const HandleWithdrawalCommand = require("./withdrawal/withdraw");
 const HandleLoginCommand = require("./auth/login");
+const HandleRegisterCommand = require("./auth/register");
 
 class CommandFactory {
   static createCommand(stage) {
@@ -37,6 +38,8 @@ class CommandFactory {
         return new HandleLoginCommand();
         case Stages.REGISTER:
         return new HandleRegisterCommand();
+        // case Stages.R_PIN_CODE:
+        //   return new HandleLoginCommand();
         // case Stages.VISA_CARD_APPLICATION:
        // return new ();
       //d other cases as necessary for different stages or command triggers
