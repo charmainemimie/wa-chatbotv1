@@ -37,7 +37,7 @@ class ShowMenuCommand {
                     }
                 ]
             }] )
-        state.stage = Stages.MENU
+        state.stage = Stages.FIRST_MENU
         return state
     }
 }

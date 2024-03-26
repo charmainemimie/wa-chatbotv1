@@ -9,7 +9,7 @@ const StartCommand = require("./start-command");
 const HandleSendMoneyCommand = require("./sendmoney/handle_send-money");
 const ResetPasswordCommand = require("./myaccount/my-account");
 // HandleVisaCardCommand = require("./visa-card/visa_menu");
-
+const HandleMenuCommand = require("./handle-mainmenu")
 const Stages = require("./stages");
 const HandleWithdrawalCommand = require("./withdrawal/withdraw");
 const HandleLoginCommand = require("./auth/login");
@@ -38,6 +38,8 @@ class CommandFactory {
         return new HandleLoginCommand();
         case Stages.REGISTER:
         return new HandleRegisterCommand();
+        case Stages.MENU:
+          return new HandleMenuCommand();
         // case Stages.R_PIN_CODE:
         //   return new HandleLoginCommand();
         // case Stages.VISA_CARD_APPLICATION:

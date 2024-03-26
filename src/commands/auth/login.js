@@ -13,7 +13,7 @@ class HandleLoginCommand {
         const { from, msg, messageType } = message;
 
             const customerPinCode = msg.body;
-            const customerPhoneNumber = msg.from;
+            const customerPhoneNumber = from.phoneNumber;
 
             if(messageType==="interactive"){
                 client.sendText(from.phoneNumber, "Login failed. Please try again.", false);
@@ -23,24 +23,20 @@ class HandleLoginCommand {
             try {
                 // Make an API call to log in the customer
                 const response = await axios.post('https://noqapp-api-oitk6.ondigitalocean.app/customer/auth/login', {
-                    customerPhoneNumber: from.phoneNumber,
-                    customerPinCode: customerPinCode,
+                    customerPhoneNumber,
+                    customerPinCode
                 });
-
-                // Check if login was successful
-                if (response.data.success) {
-                    // Send success message
-                    client.sendText(from.phoneNumber, `Login successful. Welcome back!`, false);
+                console.log(response.data)
+                state.info.token = response.data.token
+                client.sendText(from.phoneNumber, response.data.message, false);
                     // Clear the user's stage
                     // Execute the ShowMenuCommand to display the menu
-                    return new ShowMenuCommand().execute(message, state, client);
-                } else {
-                    // Send prompt to enter PIN code if login was unsuccessful
-                    client.sendText(from.phoneNumber, "Login failed. Please try again.", false);
-                }
+                return new ShowMenuCommand().execute(message, state, client);
+                
             } catch (error) {
                 
                 if(error.response && error.response.status===401){
+                    console.log(error.response.data)
                     client.sendButtonMessage(from.phoneNumber, "Incorrect pin ❌\n\nPlease enter the correct PIN code:",  [
                         {
                             "type": "reply",
