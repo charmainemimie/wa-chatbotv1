@@ -1,4 +1,5 @@
 const { createClient } = require('redis');
+const { generateAuthToken } = require('../../commands/session');
 
 class RedisClient {
   
@@ -37,6 +38,10 @@ class RedisClient {
 
   async clearValue(key) {
     return await this.client.del(key);
+  }
+
+  setToken(token) {
+    this.client.set('authToken', token);
   }
 }
 

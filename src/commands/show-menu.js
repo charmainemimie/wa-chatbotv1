@@ -34,10 +34,20 @@ class ShowMenuCommand {
                         "id": "8912",
                         "title": "My Account",
                         "description": "View your Account Details"
+                    },
+                    {
+                        "id": "8900",
+                        "title": "Logout",
+                        "description": "Back to Menu"
                     }
+                    // {
+                    //             "id": "8913",
+                    //             "title": "Logout",
+                    //             "description": "Logout"
+                    // }
                 ]
             }] )
-        state.stage = Stages.FIRST_MENU
+        state.stage = Stages.FIRST_MENU;
         return state
     }
 }

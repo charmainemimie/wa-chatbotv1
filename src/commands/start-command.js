@@ -1,7 +1,7 @@
 const HandleLoginCommand = require("./auth/login");
 const HandleRegisterCommand = require("./auth/register");
 const Stages = require("./stages");
-
+const  ErrorCommand = require('./error-handler')
 class StartCommand {
   constructor() {}
 
@@ -40,12 +40,12 @@ class StartCommand {
           rows: [
             {
               id: "2222",
-              title: "LOGIN",
+              title: "Login",
               description: "If you have an account Login to start transacting",
             },
             {
               id: "1111",
-              title: "REGISTER",
+              title: "Register",
               description: "Click to register",
             },
           ],

@@ -2,6 +2,7 @@ const ErrorCommand = require("./error-handler");
 const ResetPasswordCommand = require("./myaccount/my-account");
 const ShowMenuCommand = require("./show-menu");
 const  Stages  = require('./stages');
+const StartCommand = require("./start-command");
 const HandleTransferCommand = require("./transferhistory/handle-transfer");
 const HandleWithdrawalCommand = require("./withdrawal/withdraw");
 class HandleStartCommand {
@@ -51,6 +52,8 @@ class HandleStartCommand {
 
             case "8912":
                 return new ResetPasswordCommand().execute(message, state, client);
+            case "8900":
+                return new StartCommand().execute(message, state, client);
                 //     client.sendText(from.phoneNumber, ".", false)
                 //     state.stage = Stages.MY_ACCOUNT
                 //  break;
