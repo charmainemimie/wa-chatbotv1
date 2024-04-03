@@ -84,7 +84,8 @@ class HandleMenuCommand {
         case "8912":
           return new ResetPasswordCommand().execute(message, state, client);
         case "8900":
-                return new StartCommand().execute(message, state, client);
+          console.log("user logged out")
+          return new StartCommand().execute(message, state, client);
           
 
         default:

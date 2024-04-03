@@ -41,7 +41,7 @@ try{
   redis.setValue(from.phoneNumber,JSON.stringify(userData));
 }catch(error){
   console.log("Error:\n", error)
-  client.sendText(from.phoneNumber, "An unexpected error occurred. Please try again later.", false);
+  client.sendText(from.phoneNumber, "An unexpected error occurred(2). Please try again later.", false);
   redis.clearValue(from.phoneNumber)
 }
   

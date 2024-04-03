@@ -33,7 +33,7 @@ class RedisClient {
   }
 
   async setValue(key, value) {
-    return await this.client.set(key, value);
+    return await this.client.set(key, value,{EX:60*60*24}); // set value and maintain for 1 day
   }
 
   async clearValue(key) {

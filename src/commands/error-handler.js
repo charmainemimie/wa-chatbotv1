@@ -6,7 +6,7 @@ class ErrorCommand {
 
     execute(message, state, client) {
         const { from, messageType, msg, messageId } = message;
-        client.sendText(from.phoneNumber, "An unexpected error occurred. Please try again later.", false);
+        client.sendText(from.phoneNumber, "An unexpected error occurred (1). Please try again later.", false);
         state = {
             phoneNumber: from.phoneNumber,
             username: from.username,

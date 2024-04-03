@@ -53,6 +53,8 @@ class HandleStartCommand {
             case "8912":
                 return new ResetPasswordCommand().execute(message, state, client);
             case "8900":
+                console.log("logging user out")
+                message.messageType="text"
                 return new StartCommand().execute(message, state, client);
                 //     client.sendText(from.phoneNumber, ".", false)
                 //     state.stage = Stages.MY_ACCOUNT
