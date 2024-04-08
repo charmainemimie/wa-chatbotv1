@@ -1,5 +1,5 @@
 const { createClient } = require('redis');
-const { generateAuthToken } = require('../../commands/session');
+//const { generateAuthToken } = require('../../commands/session');
 
 class RedisClient {
   
